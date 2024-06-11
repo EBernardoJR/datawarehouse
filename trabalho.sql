@@ -75,3 +75,40 @@ from tb_pedido pd
          inner join tb_mesa m on pd.codigo_mesa = m.codigo_mesa
          inner join tb_cliente c on m.id_cliente = c.id_cliente
 group by c.nome_cliente order by valor_total desc;
+
+/**
+  Qual(is) o(s) cliente(s) que trouxe(ram) mais pessoas por ano
+ */
+select distinct
+    c.nome_cliente,
+    sum(m.num_pessoa_mesa) as quantidade_pessoas,
+    '2024' as ano
+from tb_pedido pd
+         inner join tb_prato p on pd.codigo_prato = p.codigo_prato
+         inner join tb_mesa m on pd.codigo_mesa = m.codigo_mesa
+         inner join tb_cliente c on m.id_cliente = c.id_cliente
+where year(m.data_hora_saida) = 2024
+group by c.nome_cliente
+
+union all
+select distinct
+    c.nome_cliente,
+    sum(m.num_pessoa_mesa) as quantidade_pessoas,
+    '2023' as ano
+from tb_pedido pd
+         inner join tb_prato p on pd.codigo_prato = p.codigo_prato
+         inner join tb_mesa m on pd.codigo_mesa = m.codigo_mesa
+         inner join tb_cliente c on m.id_cliente = c.id_cliente
+where year(m.data_hora_saida) = 2023
+group by c.nome_cliente
+union all
+select distinct
+    c.nome_cliente,
+    sum(m.num_pessoa_mesa) as quantidade_pessoas,
+    '2022' as ano
+from tb_pedido pd
+         inner join tb_prato p on pd.codigo_prato = p.codigo_prato
+         inner join tb_mesa m on pd.codigo_mesa = m.codigo_mesa
+         inner join tb_cliente c on m.id_cliente = c.id_cliente
+where year(m.data_hora_saida) = 2022
+group by c.nome_cliente order by quantidade_pessoas desc;
